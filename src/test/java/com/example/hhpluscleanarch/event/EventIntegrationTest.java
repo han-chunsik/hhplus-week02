@@ -84,6 +84,40 @@ public class EventIntegrationTest {
             System.out.println("실패한 요청 수: " + failedRequests.size());
         }
 
+        @Test
+        @DisplayName("동일한 유저 정보로 같은 특강을 5번 신청했을 때, 한 번만 성공")
+        public void 동일한_유저_정보로_같은_특강을_5번_신청했을_때_1번만_성공하는_것을_검증() throws Exception {
+            //given
+            int threadCount = 5;
+            long eventId = 2L;
+            long userId = 1L;
 
+            CountDownLatch doneSignal = new CountDownLatch(threadCount);
+            ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+
+            List<Throwable> failedRequests = new ArrayList<>();
+            List<Long> successfulUserIds = new ArrayList<>();
+
+            // when
+            for (long i = 1; i <= threadCount; i++) {
+                executorService.execute(() -> {
+                    try {
+                        eventService.applyForEvent(userId, eventId);
+                        successfulUserIds.add(userId);
+                    } catch (Exception e) {
+                        log.error("An error occurred: ", e);
+                        failedRequests.add(e);
+                    } finally {
+                        doneSignal.countDown(); // 각 스레드가 종료될 때마다 호출
+                    }
+                });
+            }
+            doneSignal.await();
+            executorService.shutdown();
+
+            assertEquals(1, successfulUserIds.size());
+            assertEquals(4, failedRequests.size());
+            System.out.println("실패한 요청 수: " + failedRequests.size());
+        }
     }
 }
