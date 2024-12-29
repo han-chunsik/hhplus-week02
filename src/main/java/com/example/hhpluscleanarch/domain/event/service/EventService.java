@@ -25,7 +25,6 @@ public class EventService {
      * @param dateString 날짜
      * @return 신청 가능 특강 목록
      */
-    @Transactional
     public EventResponse getAvailableEvents (String dateString){
         // 1. 파라미터 타입 변환(String -> Date)
         LocalDate date = LocalDate.parse(dateString);
@@ -50,7 +49,7 @@ public class EventService {
     public EventApplicationResponse applyForEvent (Long userId, Long eventId) {
 
         // 1. 해당 event의 최대정원과 현재 신청 인원 조회, 해당 로우 잠금
-        Event event = eventRepository.getEventById(eventId);
+        Event event = eventRepository.getEventByIdWithLock(eventId);
 
         // 2. 최대 정원 체크, 오류 발생 시 해당 로우 잠금 해제
         int eventMaxCapacity = event.getMaxCapacity();
@@ -87,7 +86,6 @@ public class EventService {
      * @param userId 조회할 사용자 ID
      * @return 신청 완료 특강 목록
      */
-    @Transactional
     public EventResponse getCompletedEvents(long userId) {
         // 1. 사용자 신청 완료 목록 조회
         List<EventApplication> eventApplicationList = eventRepository.getEventApplicationByUserId(userId);

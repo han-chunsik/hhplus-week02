@@ -12,7 +12,7 @@ public interface EventRepository {
     List<Event> findAllValidEvents(LocalDate currentDate);
     List<Event> getEventFindAllById(List<Long> eventIds);
     Event saveEventCurrentApplicants(Long eventId);
-    Event getEventById(Long eventId);
+    Event getEventByIdWithLock(Long eventId);
     EventApplication getEventApplicationByUserAndEventId(Long userId, Long eventId);
     List<EventApplication> getEventApplicationByUserId(Long userId);
     int countEventApplicationByUserAndEventId(Long userId, Long eventId);

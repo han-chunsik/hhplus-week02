@@ -25,7 +25,7 @@ public class EventRepositoryImpl implements EventRepository {
 
     @Override
     public Event saveEventCurrentApplicants(Long eventId) {
-        Event event = eventJpaRepository.getEventById(eventId);
+        Event event = eventJpaRepository.getEventByIdWithLock(eventId);
         event.setCurrentApplicants(event.getCurrentApplicants() + 1);
         return event;
 
@@ -37,8 +37,8 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     @Override
-    public Event getEventById(Long eventId) {
-        return eventJpaRepository.getEventById(eventId);
+    public Event getEventByIdWithLock(Long eventId) {
+        return eventJpaRepository.getEventByIdWithLock(eventId);
     }
 
     @Override
