@@ -59,7 +59,7 @@ public class EventServiceTest {
                         LocalDateTime.now()
                 );
 
-                when(eventRepository.getEventById(eventId)).thenReturn(event1);
+                when(eventRepository.getEventByIdWithLock(eventId)).thenReturn(event1);
 
                 // When/Then
                 RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -88,7 +88,7 @@ public class EventServiceTest {
                         LocalDateTime.now()
                 );
 
-                when(eventRepository.getEventById(eventId)).thenReturn(event1);
+                when(eventRepository.getEventByIdWithLock(eventId)).thenReturn(event1);
                 when(eventRepository.countEventApplicationByUserAndEventId(userId, eventId)).thenReturn(1);
 
                 // When/Then

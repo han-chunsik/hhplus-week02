@@ -20,5 +20,5 @@ public interface EventJpaRepository extends JpaRepository<Event, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT e FROM Event e WHERE e.eventId = :eventId")
-    Event getEventById(Long eventId);
+    Event getEventByIdWithLock(Long eventId);
 }

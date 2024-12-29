@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -57,8 +58,8 @@ public class EventIntegrationTest {
             CountDownLatch doneSignal = new CountDownLatch(threadCount);
             ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
-            List<Throwable> failedRequests = new ArrayList<>();
-            List<Long> successfulUserIds = new ArrayList<>();
+            AtomicLong successfulRequestCount = new AtomicLong(0);
+            AtomicLong failedRequestCount = new AtomicLong(0);
 
             // when
             for (long i = 1; i <= threadCount; i++) {
@@ -67,10 +68,10 @@ public class EventIntegrationTest {
                     try {
                         eventService.applyForEvent(userId, eventId);
                         System.out.println(userId);
-                        successfulUserIds.add(userId);
+                        successfulRequestCount.incrementAndGet();
                     } catch (Exception e) {
                         log.error("An error occurred: ", e);
-                        failedRequests.add(e);
+                        failedRequestCount.incrementAndGet();
                     } finally {
                         doneSignal.countDown(); // 각 스레드가 종료될 때마다 호출
                     }
@@ -79,9 +80,9 @@ public class EventIntegrationTest {
             doneSignal.await();
             executorService.shutdown();
 
-            assertEquals(30, successfulUserIds.size());
-            assertEquals(10, failedRequests.size());
-            System.out.println("실패한 요청 수: " + failedRequests.size());
+            assertEquals(30, successfulRequestCount.get());
+            assertEquals(10, failedRequestCount.get());
+            System.out.println("실패한 요청 수: " + failedRequestCount.get());
         }
 
         @Test
@@ -95,18 +96,18 @@ public class EventIntegrationTest {
             CountDownLatch doneSignal = new CountDownLatch(threadCount);
             ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
-            List<Throwable> failedRequests = new ArrayList<>();
-            List<Long> successfulUserIds = new ArrayList<>();
+            AtomicLong successfulRequestCount = new AtomicLong(0);
+            AtomicLong failedRequestCount = new AtomicLong(0);
 
             // when
             for (long i = 1; i <= threadCount; i++) {
                 executorService.execute(() -> {
                     try {
                         eventService.applyForEvent(userId, eventId);
-                        successfulUserIds.add(userId);
+                        successfulRequestCount.incrementAndGet();
                     } catch (Exception e) {
                         log.error("An error occurred: ", e);
-                        failedRequests.add(e);
+                        failedRequestCount.incrementAndGet();
                     } finally {
                         doneSignal.countDown(); // 각 스레드가 종료될 때마다 호출
                     }
@@ -115,9 +116,9 @@ public class EventIntegrationTest {
             doneSignal.await();
             executorService.shutdown();
 
-            assertEquals(1, successfulUserIds.size());
-            assertEquals(4, failedRequests.size());
-            System.out.println("실패한 요청 수: " + failedRequests.size());
+            assertEquals(1, successfulRequestCount.get());
+            assertEquals(4, failedRequestCount.get());
+            System.out.println("실패한 요청 수: " + failedRequestCount.get());
         }
     }
 }
