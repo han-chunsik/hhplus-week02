@@ -1,5 +1,5 @@
 # 특강 신청 서비스
-> `special lecture` 가 특강을 표현하기에 가장 직관적이라 생각하였으나, 컬럼명, API endpoint로 사용하기엔 긴 느낌이 있어 `event` 사용.
+> `special lecture` 가 특강을 표현하기에 가장 직관적이라 생각하였으나, 컬럼명, API endpoint로 사용하기엔 긴 느낌이 있어 `event` 사용
 
 ## 1️⃣ 기능 및 정책 정의
 ### 기능
@@ -14,7 +14,7 @@
 - (추가)사용자는 신청가능 특강 목록 조회 시 특정 날짜를 선택하면, 해당 날짜에 신청 가능한 특강만 조회 가능함
 
 ## 2️⃣ Use Case
-![image](https://github.com/user-attachments/assets/edc3e9dd-ba20-48f8-841f-d992033a0fa3)
+![image](https://github.com/user-attachments/assets/3bfd06f8-88a9-4e39-8746-24f02664a733)
 
 |Use Case|특강 신청 서비스|
 |--|--|
@@ -32,8 +32,7 @@
 |신청 완료|신청완료ID, 신청자ID, 특강ID|
 
 ### 개념 설계
-![image](https://github.com/user-attachments/assets/981926cc-b9e6-4438-b626-3f947a8855cc)
-
+![image](https://github.com/user-attachments/assets/2a69925b-d0f6-43b9-a81d-7f29e3253e9a)  
 
 - **사용자 - 신청(신청 완료)**
     - 유형: 1:n
@@ -46,8 +45,7 @@
     - 하나의 사용자는 여러 특강에 신청할 수 있고, 하나의 특강도 여러 사용자의 신청을 받을 수 있음
 
 ### ERD
-![image](https://github.com/user-attachments/assets/bb6ca25b-092d-49dc-8eda-dfebdcb919ec)
-
+![image](https://github.com/user-attachments/assets/7b73c365-e852-4a29-808e-e2e1eb596bef)
 
 - 한 명의 사용자는 여러 신청을 할 수 있지만, 신청이 없을수도, 여러개 있을 수 있음
 - 하나의 신청은 반드시 하나의 특강에 속해야 하지만, 하나의 특강에는 여러 신청이 있을 수 있음
